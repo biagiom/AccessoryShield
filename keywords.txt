@@ -1,0 +1,98 @@
+###########################################
+# Syntax Coloring Map For Accessory Shield
+###########################################
+
+###########################################
+# Datatypes (KEYWORD1)
+###########################################
+
+AccessoryShield	KEYWORD1
+accessoryShield	KEYWORD1
+Oled	KEYWORD1
+TemperatureUnit	KEYWORD1
+JoystickMode	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+
+readPot	KEYWORD2
+
+setRGB	KEYWORD2
+getRGBstate	KEYWORD2
+redON	KEYWORD2
+redOFF	KEYWORD2
+greenON	KEYWORD2
+greenOFF	KEYWORD2
+blueON	KEYWORD2
+blueOFF	KEYWORD2
+
+activateBuzzer	KEYWORD2
+disableBuzzer	KEYWORD2
+playBuzzer		KEYWORD2
+getBuzzerState	KEYWORD2
+
+activateRelay	KEYWORD2
+disableRelay	KEYWORD2
+getRelayState	KEYWORD2
+
+getJoystickValue	KEYWORD2
+
+getTemperature	KEYWORD2
+getHumidity	KEYWORD2
+getEnvironmentalData	KEYWORD2
+convertTempCtoF	KEYWORD2
+convertTempCtoK	KEYWORD2
+convertTempFtoC	KEYWORD2
+convertTempFtoK	KEYWORD2
+convertTempKtoC	KEYWORD2
+convertTempKtoF	KEYWORD2
+computeHeatIndex	KEYWORD2
+
+oledBegin	KEYWORD2
+oledCommand	KEYWORD2
+clearOledDisplay	KEYWORD2
+invertOledDisplay	KEYWORD2
+oledPaint	KEYWORD2
+startScrollRightOled	KEYWORD2
+startScrollLeftOled	KEYWORD2
+startScrollDiagrightOled	KEYWORD2
+startScrollDiagleftOled	KEYWORD2
+stopScrollOled	KEYWORD2	
+dimOled	KEYWORD2
+drawPixel	KEYWORD2
+drawFastVLineOled	KEYWORD2
+drawFastHLineOled	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+# DHT11 constants
+CELSIUS	LITERAL1
+FARENEITH	LITERAL1
+KELVIN	LITERAL1
+DHT11_CHECKSUM_ERROR	LITERAL1
+DHT11_GETTING_DATA_ERROR	LITERAL1
+DHT11_TIMEOUT_ERROR	LITERAL1
+DHT11_ACK_RECEIVED	LITERAL1
+DHT11_DATA_READ	LITERAL1
+
+# RGB led constants
+LED_ON	LITERAL1
+LED_OFF	LITERAL1
+RED_LED	LITERAL1
+GREEN_LED	LITERAL1
+BLUE_LED	LITERAL1
+
+# Joystick constants
+JOYSTICK_NONE	LITERAL1
+JOYSTICK_UP	LITERAL1
+JOYSTICK_DOWN	LITERAL1
+JOYSTICK_LEFT	LITERAL1
+JOYSTICK_RIGHT	LITERAL1
+JOYSTICK_PUSH	LITERAL1
+JOYSTICK_NONE_OR_DOWN	LITERAL1
