@@ -1,8 +1,8 @@
-= Accessory Shield Library for Arduino boards =
+# Accessory Shield Library for Arduino boards
 
 This library allows an Arduino board to use the actuators, sensors and OLED display of the DFRobot Accessory Shield.
 
-For more info see the [Product web page](https://www.dfrobot.com/index.php?route=product/product&product_id=1045)
+For more info see the [Product page on DFRobot web site](https://www.dfrobot.com/index.php?route=product/product&product_id=1045)
 or the [Wiki page](https://www.dfrobot.com/wiki/index.php/Accessory_Shield_for_Arduino_SKU:DFR0270)
 
 To control the OLED display through the I2C interface, the Accessory Shield Library includes a modified version of 
@@ -16,7 +16,7 @@ Arduino Library Manager. For more info about the Library Manager and Arduino lib
 https://www.arduino.cc/en/Guide/Libraries 
 
 
-== License ==
+### License
 
 Copyright (c) 2016 Biagio Montaruli.
 
