@@ -76,6 +76,8 @@ void loop() {
         Serial.println("Turning all leds OFF");
         accessoryShield.setRGB(LED_OFF, LED_OFF, LED_OFF);
         break;
+      default :
+        break;
     }
     // update the old joystick value
     joystickOldValue = joystickNewValue;
