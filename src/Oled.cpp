@@ -5,7 +5,7 @@ The OLED display uses the SSD1306 driver thought the I2C interface.
 The OLED library is based on Oled library which has been
 modified in order to support the OLED display of Accessory Shield.
 Many thanks to the library writer Limor Fried/Ladyada and to Adafruit
-team which provide many and great open source code 
+team which provide many and great open source code
 
 *****************************************************************************/
 
@@ -281,7 +281,7 @@ void Oled::startScrollLeftOled(uint8_t start, uint8_t stop){
 	oledCommand(SSD1306_ACTIVATE_SCROLL);
 }
 
-/** startScrollDiagrightOled()
+/** startScrollDiagRightOled()
  *	@brief Public function member to activate a diagonal right scroll 
  *		   for rows start through stop
  *	@param start : the start row
@@ -289,7 +289,7 @@ void Oled::startScrollLeftOled(uint8_t start, uint8_t stop){
  *	@note The display is 16 rows tall. To scroll the whole display, run :
  *		  accessoryShield.scrollRightOled(0x00, 0x0F)
  */
-void Oled::startScrollDiagrightOled(uint8_t start, uint8_t stop){
+void Oled::startScrollDiagRightOled(uint8_t start, uint8_t stop){
 	oledCommand(SSD1306_SET_VERTICAL_SCROLL_AREA);
 	oledCommand(0X00);
 	oledCommand(SSD1306_LCDHEIGHT);
@@ -302,7 +302,7 @@ void Oled::startScrollDiagrightOled(uint8_t start, uint8_t stop){
 	oledCommand(SSD1306_ACTIVATE_SCROLL);
 }
 
-/** startScrollDiagleftOled()
+/** startScrollDiagLeftOled()
  *	@brief Public function member to activate a diagonal left scroll 
  *		   for rows start through stop
  *	@param start : the start row
@@ -310,7 +310,7 @@ void Oled::startScrollDiagrightOled(uint8_t start, uint8_t stop){
  *	@note The display is 16 rows tall. To scroll the whole display, run :
  *		  accessoryShield.scrollRightOled(0x00, 0x0F)
  */
-void Oled::startScrollDiagleftOled(uint8_t start, uint8_t stop){
+void Oled::startScrollDiagLeftOled(uint8_t start, uint8_t stop){
 	oledCommand(SSD1306_SET_VERTICAL_SCROLL_AREA);
 	oledCommand(0X00);
 	oledCommand(SSD1306_LCDHEIGHT);

@@ -12,6 +12,7 @@
 
  created 3 Sept 2016
  by Biagio Montaruli
+ updated 17 August 2017
 
  this code is in the public domain
 
@@ -56,7 +57,11 @@ void loop() {
   xDistance = yDistance = distanceOffset;
 
   // check if the joystick has been moved
+#if (defined(_VARIANT_ARDUINO_101_X_) || defined(__SAM3X8E__) || defined(ARDUINO_ARCH_SAMD))
+  if(joystickValue != JOYSTICK_NONE_OR_DOWN) {
+#else
   if(joystickValue != JOYSTICK_NONE) {
+#endif
     // print values of X and Y distance
 #ifdef SKETCH_DEBUG
     Serial.print("X distance offset= ");
@@ -74,10 +79,12 @@ void loop() {
       case JOYSTICK_UP :
         Mouse.move(0, -yDistance, 0);
         break;
+#if !(defined(_VARIANT_ARDUINO_101_X_) || defined(__SAM3X8E__) || defined(ARDUINO_ARCH_SAMD))
       // if the joystick has been moved down, move down the mouse cursor
       case JOYSTICK_DOWN :
         Mouse.move(0, yDistance, 0);
         break;
+#endif
       // if the joystick has been moved right, move right the mouse cursor
       case JOYSTICK_RIGHT :
         Mouse.move(xDistance, 0, 0);

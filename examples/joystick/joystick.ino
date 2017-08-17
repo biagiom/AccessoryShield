@@ -40,22 +40,28 @@ void loop() {
   // construct use the case label JOYSTICK_NONE_OR_DOWN
   if(joystickNewValue != joystickOldValue) {
     switch(joystickNewValue) {
-      case JOYSTICK_RIGHT :
-        Serial.println("Joystick moved right");
+    #if (defined(_VARIANT_ARDUINO_101_X_) || defined(__SAM3X8E__) || defined(ARDUINO_ARCH_SAMD))
+      case JOYSTICK_NONE_OR_DOWN:
+        Serial.println("Joystick not moved or moved down");
         break;
-      case JOYSTICK_LEFT :
-        Serial.println("Joystick moved left");
+    #else
+      case JOYSTICK_NONE:
+        Serial.println("Joystick not moved");
         break;
-      case JOYSTICK_UP :
-        Serial.println("Joystick moved up");
-        break;
-      case JOYSTICK_DOWN :
+      case JOYSTICK_DOWN:
         Serial.println("Joystick moved down");
         break;
-      case JOYSTICK_NONE_OR_DOWN :
-        Serial.println("Joystick not moved or moved left");
+    #endif
+      case JOYSTICK_LEFT:
+        Serial.println("Joystick moved left");
         break;
-      case JOYSTICK_PUSH :
+      case JOYSTICK_RIGHT:
+        Serial.println("Joystick moved right");
+        break;
+      case JOYSTICK_UP:
+        Serial.println("Joystick moved up");
+        break;
+      case JOYSTICK_PUSH:
         Serial.println("Joystick pushed");
         break;
     }
@@ -63,5 +69,5 @@ void loop() {
     joystickOldValue = joystickNewValue;
   }
   // wait for a small delay
-  delay(20);
+  delay(10);
 }

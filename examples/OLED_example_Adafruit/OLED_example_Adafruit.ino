@@ -18,11 +18,14 @@ this code is in the public domain
 
 #include <AccessoryShield.h>
 
+#if defined(__AVR_ATmega32U4__)
+    #error "Arduino Leonardo pinout does not allow using OLED of Acessory Shield"
+#endif
+
 #define NUMFLAKES 10
 #define XPOS 0
 #define YPOS 1
 #define DELTAY 2
-
 
 #define LOGO16_GLCD_HEIGHT 16 
 #define LOGO16_GLCD_WIDTH  16 
@@ -45,7 +48,7 @@ static const unsigned char PROGMEM logo16_glcd_bmp[] =
   B00000000, B00110000 };
 
 #if (SSD1306_LCDHEIGHT != 64)
-#error("Height incorrect, please fix Oled.h!in src directory of AccessoryShield library");
+#error("Height incorrect, please fix Oled.h in src directory of AccessoryShield library");
 #endif
 
 void setup()   {                
@@ -361,9 +364,9 @@ void testscrolltext(void) {
   delay(2000);
   accessoryShield.stopScrollOled();
   delay(1000);    
-  accessoryShield.startScrollDiagrightOled(0x00, 0x07);
+  accessoryShield.startScrollDiagRightOled(0x00, 0x07);
   delay(2000);
-  accessoryShield.startScrollDiagleftOled(0x00, 0x07);
+  accessoryShield.startScrollDiagLeftOled(0x00, 0x07);
   delay(2000);
   accessoryShield.stopScrollOled();
 }

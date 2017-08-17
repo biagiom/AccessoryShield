@@ -32,7 +32,7 @@ void setup() {
 
 void loop() {
   // get temperarture in degrees Celsius
-  tempC = accessoryShield.getTemperature(CELSIUS);
+  tempC = accessoryShield.getTemperature(DHT11_TEMP_CELSIUS);
   // convert temperature from Celsius to Fareneith 
   tempF = accessoryShield.convertTempCtoF(tempC);
   // convert temperature from Celsius to Kelvin
@@ -71,7 +71,7 @@ void loop() {
   // For more info about the heat index, see the documentation
   // in source code or follow this link :
   // https://en.wikipedia.org/wiki/Heat_index
-  heatIndex = accessoryShield.computeHeatIndex(CELSIUS);
+  heatIndex = accessoryShield.computeHeatIndex(DHT11_TEMP_CELSIUS);
   Serial.print("Heat index measured in Celsius degrees : ");
   Serial.println(heatIndex);
   Serial.println();

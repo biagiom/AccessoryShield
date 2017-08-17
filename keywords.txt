@@ -30,13 +30,13 @@ greenOFF	KEYWORD2
 blueON	KEYWORD2
 blueOFF	KEYWORD2
 
-activateBuzzer	KEYWORD2
-disableBuzzer	KEYWORD2
+buzzerON	KEYWORD2
+buzzerOFF	KEYWORD2
 playBuzzer		KEYWORD2
 getBuzzerState	KEYWORD2
 
-activateRelay	KEYWORD2
-disableRelay	KEYWORD2
+relayON	KEYWORD2
+relayOFF	KEYWORD2
 getRelayState	KEYWORD2
 
 getJoystickValue	KEYWORD2
@@ -59,11 +59,11 @@ invertOledDisplay	KEYWORD2
 oledPaint	KEYWORD2
 startScrollRightOled	KEYWORD2
 startScrollLeftOled	KEYWORD2
-startScrollDiagrightOled	KEYWORD2
-startScrollDiagleftOled	KEYWORD2
+startScrollDiagRightOled	KEYWORD2
+startScrollDiagLeftOled	KEYWORD2
 stopScrollOled	KEYWORD2	
 dimOled	KEYWORD2
-drawPixel	KEYWORD2
+oledDrawPixel	KEYWORD2
 drawFastVLineOled	KEYWORD2
 drawFastHLineOled	KEYWORD2
 
@@ -72,9 +72,9 @@ drawFastHLineOled	KEYWORD2
 #######################################
 
 # DHT11 constants
-CELSIUS	LITERAL1
-FARENEITH	LITERAL1
-KELVIN	LITERAL1
+DHT11_TEMP_CELSIUS	LITERAL1
+DHT11_TEMP_FARENEITH	LITERAL1
+DHT11_TEMP_KELVIN	LITERAL1
 DHT11_CHECKSUM_ERROR	LITERAL1
 DHT11_GETTING_DATA_ERROR	LITERAL1
 DHT11_TIMEOUT_ERROR	LITERAL1

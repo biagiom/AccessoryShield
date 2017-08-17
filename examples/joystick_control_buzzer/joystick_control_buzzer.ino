@@ -6,6 +6,7 @@
  
  created 3 Sept 2016
  by Biagio Montaruli
+ updated 17 August 2017
 
  this code is in the public domain
  */
@@ -49,8 +50,8 @@ void loop() {
           accessoryShield.playBuzzer(frequency, buzzerDelay);
         }
         else if(accessoryShield.getBuzzerState() == HIGH) {
-          Serial.println("Turning the buzzer OFF");
-          accessoryShield.disableBuzzer();
+          Serial.println("Turning OFF the buzzer...");
+          accessoryShield.buzzerOFF();
         }
         break;
        // if the joystick has been moved right, increment the buzzer frequency
@@ -81,6 +82,7 @@ void loop() {
         Serial.print("Buzzer delay = ");
         Serial.println(buzzerDelay);
         break;
+      #if !(defined(_VARIANT_ARDUINO_101_X_) || defined(__SAM3X8E__) || defined(ARDUINO_ARCH_SAMD))
       // if the joystick has been moved down, decrement the buzzer delay
       case JOYSTICK_DOWN :
         Serial.println("Joystick moved down");
@@ -93,6 +95,7 @@ void loop() {
           buzzerDelay = 1;
         }
         break;
+      #endif
     }
     Serial.println();
     // update the old joystick value

@@ -28,8 +28,12 @@
 
 /** joystickModes : array of strings
  *	@brief Array of strings that represent the joystick states
- */  
-const char *AccessoryShield::joystickModes[] = {"NONE", "UP", "DOWN", "LEFT", "RIGHT", "PUSHED"};
+ */
+#if (defined(_VARIANT_ARDUINO_101_X_) || defined(__SAM3X8E__) || defined(ARDUINO_ARCH_SAMD))
+    const char *AccessoryShield::joystickModes[] = {"NONE or DOWN", "UP", "LEFT", "RIGHT", "PUSHED"};
+#else
+    const char *AccessoryShield::joystickModes[] = {"NONE", "UP", "DOWN", "LEFT", "RIGHT", "PUSHED"};
+#endif
 
 /**************************************** CONSTRUCTOR *******************************************/
 
@@ -57,7 +61,11 @@ AccessoryShield::AccessoryShield(void) {
 	// set joystick initial values and state
 	joystickMoved = false;
 	joystickValue = 1023;
-	joystickState = JOYSTICK_NONE;
+#if (defined(_VARIANT_ARDUINO_101_X_) || defined(__SAM3X8E__) || defined(ARDUINO_ARCH_SAMD))
+	joystickState = JOYSTICK_NONE_OR_DOWN;
+#else
+    joystickState = JOYSTICK_NONE;
+#endif
 	
 	// set relay initial state
 	relayState = LOW;
@@ -274,12 +282,13 @@ void AccessoryShield::end(void) {
 	// turn RGB led OFF
 	setRGB(LED_OFF, LED_OFF, LED_OFF);
 	// turn the buzzer OFF
-	disableBuzzer();
+	buzzerOFF();
 	// disable the relay
-	disableRelay();
+	relayOFF();
 #if !defined(__AVR_ATmega32U4__)
 	// clear OLED display
 	clearOledDisplay();
+	oledPaint();
 #endif
 }
 
@@ -426,36 +435,36 @@ void AccessoryShield::setRGB(uint8_t redState, uint8_t greenState, uint8_t blueS
  */
 uint8_t AccessoryShield::getRGBstate(uint8_t led) {
 	switch(led) {
-	case RED_LED : 
+	case RED_LED:
 		return RGBstate[r];
 		break;
-	case GREEN_LED : 
+	case GREEN_LED:
 		return RGBstate[g];
 		break;
-	case BLUE_LED : 
+	case BLUE_LED:
 		return RGBstate[b];
 		break;
-	default :
+	default:
 		return RGBstate[r];
 	}
 }
 	
-/** activateBuzzer()
+/** buzzerON()
  *	@brief Public function member to turn the active buzzer ON
  *	@param void
  *	@return void
  */
-inline void AccessoryShield::activateBuzzer(void) {
+inline void AccessoryShield::buzzerON(void) {
 	digitalWrite(buzzerPin, HIGH);
 	buzzerState = HIGH;
 }
 
-/** disableBuzzer()
+/** buzzerOFF()
  *	@brief Public function member to turn the active buzzer OFF
  *	@param void
  *	@return void
  */
-void AccessoryShield::disableBuzzer(void) {
+void AccessoryShield::buzzerOFF(void) {
 	digitalWrite(buzzerPin, LOW);
 	buzzerState = LOW;
 }
@@ -485,29 +494,29 @@ void AccessoryShield::playBuzzer(long freq, long delayTime) {
 		delayTime = abs(delayTime);
 	
 	for(long i = 0; i < freq; i++) {
-		activateBuzzer();
+		buzzerON();
 		delay(delayTime);
-		disableBuzzer();
+		buzzerOFF();
 		delay(delayTime);
 	}
 }
 
-/** activateRelay()
- *	@brief Public function member to activate the relay attached to digital pin 11
+/** relayON()
+ *	@brief Public function member to turn ON the relay attached to digital pin 11
  *	@param void
  *	@return void
  */
-void AccessoryShield::activateRelay(void) {
+void AccessoryShield::relayON(void) {
 	digitalWrite(relayPin, HIGH);
 	relayState = HIGH;
 }
 
-/** disableRelay()
- *	@brief Public function member to deactivate the relay attached to digital pin 11
+/** relayOFF()
+ *	@brief Public function member to turn OFF the relay attached to digital pin 11
  *	@param void
  *	@return void
  */
-void AccessoryShield::disableRelay(void) {
+void AccessoryShield::relayOFF(void) {
 	digitalWrite(relayPin, LOW);
 	relayState = LOW;
 }
@@ -554,14 +563,14 @@ JoystickMode AccessoryShield::getJoystickValue(void) {
 	if(joystickRead != joystickValue) {
 		joystickMoved = true;
 		
-		if((joystickRead >= 0) && (joystickRead <= 1))
+		if((joystickRead >= 0) && (joystickRead <= 5))
 			joystickState = JOYSTICK_RIGHT;
 #if (defined(ARDUINO_ARCH_ARC32) || defined(__SAM3X8E__) || defined(ARDUINO_ARCH_SAMD))
-		else if((joystickRead >= 216) && (joystickRead <= 218))
+		else if((joystickRead >= 206) && (joystickRead <= 218))
 			joystickState = JOYSTICK_PUSH;
-		else if((joystickRead >= 490) && (joystickRead <= 494))
+		else if((joystickRead >= 470) && (joystickRead <= 493))
 			joystickState = JOYSTICK_UP;
-		else if((joystickRead >= 753) && (joystickRead <= 757))
+		else if((joystickRead >= 726) && (joystickRead <= 758))
 			joystickState = JOYSTICK_LEFT;
 		else if(joystickRead == 1023)
 			joystickState = JOYSTICK_NONE_OR_DOWN;
@@ -582,6 +591,16 @@ JoystickMode AccessoryShield::getJoystickValue(void) {
 	}
 	// return the joystick state
 	return joystickState;
+}
+
+/** getJoystickStateStr()
+ *	@brief Public function member to get a String representing the Joystick status
+ *	@param void
+ *	@return joystick status represented by an object of type String :
+ *			"UP", "DOWN", "LEFT", "RIGHT", "NONE", "NONE or DOWN".
+ */
+String AccessoryShield::getJoystickStateStr(void) {
+    return joystickModes[getJoystickValue()];
 }
 
 /** convertTempCtoF()
@@ -655,16 +674,16 @@ float AccessoryShield::getTemperature(TemperatureUnit tempUnit) {
 	int8_t DHT11state = getDHT11Data();
 	if(DHT11state == DHT11_DATA_READ) {
 		switch(tempUnit) {
-		case CELSIUS :
+		case DHT11_TEMP_CELSIUS:
 			return tempC;
 			break;
-		case FARENEITH :
+		case DHT11_TEMP_FARENEITH:
 			return tempF;
 			break;
-		case KELVIN :
+		case DHT11_TEMP_KELVIN:
 			return tempK;
 			break;
-		default :
+		default:
 			return tempC;
 		}
 	}
@@ -712,13 +731,13 @@ int8_t AccessoryShield::getEnvironmentalData(float &hum, float &temp, Temperatur
 		hum = relHumidity;
 		
 		switch(tUnit) {
-		case CELSIUS :
+		case DHT11_TEMP_CELSIUS:
 			temp = tempC;
 			break;
-		case FARENEITH :
+		case DHT11_TEMP_FARENEITH:
 			temp = tempF;
 			break;
-		case KELVIN :
+		case DHT11_TEMP_KELVIN:
 			temp = tempK;
 			break;
 		}
@@ -784,13 +803,13 @@ float AccessoryShield::computeHeatIndex(TemperatureUnit tempUnit) {
 		}
 
 		switch(tempUnit) {
-		case CELSIUS :
+		case DHT11_TEMP_CELSIUS:
 			return convertTempFtoC(hi);
 			break;
-		case FARENEITH :
+		case DHT11_TEMP_FARENEITH:
 			return hi;
 			break;
-		case KELVIN :
+		case DHT11_TEMP_KELVIN:
 			return convertTempFtoK(hi);
 			break;
 		default :

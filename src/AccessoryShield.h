@@ -45,39 +45,46 @@
 // #define SERIAL_DEBUG
 
 typedef enum {
-	CELSIUS = 1,
-	FARENEITH = 2,
-	KELVIN = 3
+	DHT11_TEMP_CELSIUS = 1,
+	DHT11_TEMP_FARENEITH = 2,
+	DHT11_TEMP_KELVIN = 3
 } TemperatureUnit;
 
-enum LedPins {
+typedef enum {
 	RED_LED = 9,
 	GREEN_LED = 10,
 	BLUE_LED = 3
-};
-
-enum LedState {
-	LED_ON = 255,
-	LED_OFF = 0
-};
+} LedPins;
 
 typedef enum {
+	LED_ON = 255,
+	LED_OFF = 0
+} LedState;
+
+typedef enum {
+#if (defined(_VARIANT_ARDUINO_101_X_) || defined(__SAM3X8E__) || defined(ARDUINO_ARCH_SAMD))
+    JOYSTICK_NONE_OR_DOWN = 0,
+    JOYSTICK_UP = 1,
+	JOYSTICK_LEFT = 2,
+	JOYSTICK_RIGHT = 3,
+	JOYSTICK_PUSH = 4,
+#else
 	JOYSTICK_NONE = 0,
 	JOYSTICK_UP = 1,
 	JOYSTICK_DOWN = 2,
 	JOYSTICK_LEFT = 3,
 	JOYSTICK_RIGHT = 4,
 	JOYSTICK_PUSH = 5,
-	JOYSTICK_NONE_OR_DOWN = 6
+#endif
 } JoystickMode;
 
-enum DHT11State {
+typedef enum {
 	DHT11_CHECKSUM_ERROR = -2,
 	DHT11_GETTING_DATA_ERROR = -1,
 	DHT11_TIMEOUT_ERROR = 0,
 	DHT11_ACK_RECEIVED = 1,
 	DHT11_DATA_READ = 2
-};
+} DHT11State;
 
  
 #if defined(__AVR_ATmega32U4__)
@@ -136,27 +143,28 @@ public :
 	void blueON(void);
 	void blueOFF(void);
 	
-	void activateBuzzer(void);
-	void disableBuzzer(void);
+	void buzzerON(void);
+	void buzzerOFF(void);
 	void playBuzzer(long freq, long delayTime);
 	bool getBuzzerState(void) const;
 	
-	void activateRelay(void);
-	void disableRelay(void);
+	void relayON(void);
+	void relayOFF(void);
 	bool getRelayState(void) const;
 	
 	JoystickMode getJoystickValue(void);
+	String getJoystickStateStr(void);
 	
-	float getTemperature(TemperatureUnit tempUnit = CELSIUS);
+	float getTemperature(TemperatureUnit tempUnit = DHT11_TEMP_CELSIUS);
 	float getHumidity(void);
-	int8_t getEnvironmentalData(float &hum, float &temp, TemperatureUnit tUnit = CELSIUS);
+	int8_t getEnvironmentalData(float &hum, float &temp, TemperatureUnit tUnit = DHT11_TEMP_CELSIUS);
 	float convertTempCtoF(float tC);
 	float convertTempCtoK(float tC);
 	float convertTempFtoC(float tF);
 	float convertTempFtoK(float tF);
 	float convertTempKtoC(float tK);
 	float convertTempKtoF(float tK);
-	float computeHeatIndex(TemperatureUnit tempUnit = FARENEITH);
+	float computeHeatIndex(TemperatureUnit tempUnit = DHT11_TEMP_FARENEITH);
 	
 };
 

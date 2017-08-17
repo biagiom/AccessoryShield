@@ -5,7 +5,7 @@ The OLED display uses the SSD1306 driver thought the I2C interface.
 The OLED library is based on Adafruit_SSD1306 library which has been
 modified in order to support the OLED display of Accessory Shield.
 Many thanks to the library writer Limor Fried/Ladyada and to Adafruit
-team which provide many and great open source code 
+team which provide many and great open source code
 
 *****************************************************************************/
 #ifndef _OLED_H_
@@ -97,8 +97,8 @@ public:
 	void startScrollRightOled(uint8_t start, uint8_t stop);
 	void startScrollLeftOled(uint8_t start, uint8_t stop);
 
-	void startScrollDiagrightOled(uint8_t start, uint8_t stop);
-	void startScrollDiagleftOled(uint8_t start, uint8_t stop);
+	void startScrollDiagRightOled(uint8_t start, uint8_t stop);
+	void startScrollDiagLeftOled(uint8_t start, uint8_t stop);
 	void stopScrollOled(void);
 	
 	void dimOled(boolean dim);

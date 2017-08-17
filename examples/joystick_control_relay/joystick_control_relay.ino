@@ -6,13 +6,14 @@
  
  created 3 Sept 2016
  by Biagio Montaruli
+ updated 17 August 2017
 
  this code is in the public domain
  */
 #include <AccessoryShield.h>
 
 // macro used to print the relay state 
-#define relayState accessoryShield.getRelayState() ? "ON" : "OFF" 
+#define relayState accessoryShield.getRelayState() ? "ON" : "OFF"
 
 // create two new variables to store the previous joystick and
 // the new joystick value
@@ -42,15 +43,15 @@ void loop() {
   if(joystickNewValue != joystickOldValue) {
     if(joystickNewValue == JOYSTICK_RIGHT) {
       Serial.println("Joystick moved RIGHT");
-      Serial.println("Activating the relay ...");
-      accessoryShield.activateRelay();
+      Serial.println("Turning the the relay ON...");
+      accessoryShield.relayON();
       Serial.print("Relay is ");
       Serial.println(relayState);
     }
     else if(joystickNewValue == JOYSTICK_LEFT) {
       Serial.println("Joystick moved LEFT");
-      Serial.println("Disabling the relay");
-      accessoryShield.disableRelay();
+      Serial.println("Turning the relay OFF");
+      accessoryShield.relayOFF();
       Serial.print("Relay is ");
       Serial.println(relayState);
     }
