@@ -13,12 +13,12 @@ In order to use the OLED library you must download and install the Adafruit GFX 
 core graphic library to display geometric shapes, text and bitmap images on the OLED display.
 You can get it from https://github.com/adafruit/Adafruit-GFX-Library; moreover you can also install it through the
 Arduino Library Manager. For more info about the Library Manager and Arduino libraries see : 
-https://www.arduino.cc/en/Guide/Libraries 
+https://www.arduino.cc/en/Guide/Libraries
 
 
 ### License
 
-Copyright (c) 2016 Biagio Montaruli.
+Copyright (c) 2017 Biagio Montaruli.
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
