@@ -10,15 +10,15 @@ team which provide many and great open source code
 *****************************************************************************/
 
 #if defined(__AVR__)
-	#include <avr/pgmspace.h>
+    #include <avr/pgmspace.h>
 #elif defined(ESP8266)
-	#include <pgmspace.h>
+    #include <pgmspace.h>
 #else
-	#define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+    #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
 #endif
 
 #if !defined(__ARM_ARCH) && !defined(ENERGIA) && !defined(ESP8266) && !defined(ARDUINO_ARCH_ARC32)
-	#include <util/delay.h>
+    #include <util/delay.h>
 #endif
 
 #include <stdlib.h>
@@ -102,31 +102,31 @@ static uint8_t buffer[SSD1306_LCDHEIGHT * SSD1306_LCDWIDTH / 8] = {
 #define ssd1306_swap(a, b) { int16_t t = a; a = b; b = t; }
 
 /** Oled() : Constructor of Oled class
- *	@brief Constructor to check if data members are initialized well
- *	@param void
- *	@note The Oled constructor call also the constructor of Adafruit GFX class
+ *  @brief Constructor to check if data members are initialized well
+ *  @param void
+ *  @note The Oled constructor call also the constructor of Adafruit GFX class
  */
 Oled::Oled(void) : Adafruit_GFX(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT) {
 
 }
 
 /** oledBegin()
- *	@brief Protected function member to initialize the Oled library
- *	@param void
- *	@note This method is protected because it can be only called by the
- *		  method begin() of AccessoryShield Class
+ *  @brief Protected function member to initialize the Oled library
+ *  @param void
+ *  @note This method is protected because it can be only called by the
+ *        method begin() of AccessoryShield Class
  */
 void Oled::oledBegin(void) {
-	// I2C Init
-	Wire.begin();
+    // I2C Init
+    Wire.begin();
 #if defined(__SAM3X8E__)
-	// Force 400 KHz I2C, rawr! (Uses pins 20, 21 for SDA, SCL)
-	TWI1->TWI_CWGR = 0;
-	TWI1->TWI_CWGR = ((VARIANT_MCK / (2 * 400000)) - 4) * 0x101;
+    // Force 400 KHz I2C, rawr! (Uses pins 20, 21 for SDA, SCL)
+    TWI1->TWI_CWGR = 0;
+    TWI1->TWI_CWGR = ((VARIANT_MCK / (2 * 400000)) - 4) * 0x101;
 #endif
-	pinMode(oledDC, OUTPUT);
-	digitalWrite(oledDC, LOW);
-	// Setup reset pin direction (used by both SPI and I2C)
+    pinMode(oledDC, OUTPUT);
+    digitalWrite(oledDC, LOW);
+    // Setup reset pin direction (used by both SPI and I2C)
     pinMode(oledReset, OUTPUT);
     digitalWrite(oledReset, HIGH);
     // VDD (3.3V) goes high at start, lets just chill for a ms
@@ -140,399 +140,397 @@ void Oled::oledBegin(void) {
     // turn on VCC (9V?)
 
   	// Init sequence
-	oledCommand(SSD1306_DISPLAYOFF);                    // 0xAE
-	oledCommand(SSD1306_SETDISPLAYCLOCKDIV);            // 0xD5
-	oledCommand(0x80);                                  // the suggested ratio 0x80
+    oledCommand(SSD1306_DISPLAYOFF);                    // 0xAE
+    oledCommand(SSD1306_SETDISPLAYCLOCKDIV);            // 0xD5
+    oledCommand(0x80);                                  // the suggested ratio 0x80
 
-	oledCommand(SSD1306_SETMULTIPLEX);                  // 0xA8
-	oledCommand(SSD1306_LCDHEIGHT - 1);
+    oledCommand(SSD1306_SETMULTIPLEX);                  // 0xA8
+    oledCommand(SSD1306_LCDHEIGHT - 1);
 
-	oledCommand(SSD1306_SETDISPLAYOFFSET);              // 0xD3
-	oledCommand(0x0);                                   // no offset
-	oledCommand(SSD1306_SETSTARTLINE | 0x0);            // line #0
-	oledCommand(SSD1306_CHARGEPUMP);                    // 0x8D 
-  	oledCommand(0x14);
-	oledCommand(SSD1306_MEMORYMODE);                    // 0x20
-	oledCommand(0x00);                                  // 0x0 act like ks0108
-	oledCommand(SSD1306_SEGREMAP | 0x1);
-	oledCommand(SSD1306_COMSCANDEC);
+    oledCommand(SSD1306_SETDISPLAYOFFSET);              // 0xD3
+    oledCommand(0x0);                                   // no offset
+    oledCommand(SSD1306_SETSTARTLINE | 0x0);            // line #0
+    oledCommand(SSD1306_CHARGEPUMP);                    // 0x8D 
+    oledCommand(0x14);
+    oledCommand(SSD1306_MEMORYMODE);                    // 0x20
+    oledCommand(0x00);                                  // 0x0 act like ks0108
+    oledCommand(SSD1306_SEGREMAP | 0x1);
+    oledCommand(SSD1306_COMSCANDEC);
 
-	oledCommand(SSD1306_SETCOMPINS);                    // 0xDA
-	oledCommand(0x12);
-	oledCommand(SSD1306_SETCONTRAST);                   // 0x81 
-	oledCommand(0xCF);
+    oledCommand(SSD1306_SETCOMPINS);                    // 0xDA
+    oledCommand(0x12);
+    oledCommand(SSD1306_SETCONTRAST);                   // 0x81 
+    oledCommand(0xCF);
 
-	oledCommand(SSD1306_SETPRECHARGE);                  // 0xd9 
-	oledCommand(0xF1);
-	oledCommand(SSD1306_SETVCOMDETECT);                 // 0xDB
-	oledCommand(0x40);
-	oledCommand(SSD1306_DISPLAYALLON_RESUME);           // 0xA4
-	oledCommand(SSD1306_NORMALDISPLAY);                 // 0xA6
+    oledCommand(SSD1306_SETPRECHARGE);                  // 0xd9 
+    oledCommand(0xF1);
+    oledCommand(SSD1306_SETVCOMDETECT);                 // 0xDB
+    oledCommand(0x40);
+    oledCommand(SSD1306_DISPLAYALLON_RESUME);           // 0xA4
+    oledCommand(SSD1306_NORMALDISPLAY);                 // 0xA6
 
-	oledCommand(SSD1306_DEACTIVATE_SCROLL);
+    oledCommand(SSD1306_DEACTIVATE_SCROLL);
 
-	oledCommand(SSD1306_DISPLAYON);  					// turn on oled panel
+    oledCommand(SSD1306_DISPLAYON);  					// turn on oled panel
 }
 
 /** drawPixel()
- *	@brief Public function member to set a single pixel of OLED display
- *	@param x : the x coordinate
- *	@param y : the y coordinate
- *	@param color
+ *  @brief Public function member to set a single pixel of OLED display
+ *  @param x : the x coordinate
+ *  @param y : the y coordinate
+ *  @param color
  */
 void Oled::drawPixel(int16_t x, int16_t y, uint16_t color) {
-	if ((x < 0) || (x >= width()) || (y < 0) || (y >= height()))
-		return;
+    if ((x < 0) || (x >= width()) || (y < 0) || (y >= height()))
+        return;
 
-	// check rotation, move pixel around if necessary
-	switch(getRotation()) {
+    // check rotation, move pixel around if necessary
+    switch(getRotation()) {
   	case 1 :
-    	ssd1306_swap(x, y);
-    	x = WIDTH - x - 1;
-    	break;
-  	case 2 :
-    	x = WIDTH - x - 1;
-    	y = HEIGHT - y - 1;
-    	break;
-  	case 3 :
-    	ssd1306_swap(x, y);
-    	y = HEIGHT - y - 1;
-    	break;
-  	}
+        ssd1306_swap(x, y);
+        x = WIDTH - x - 1;
+        break;
+    case 2 :
+        x = WIDTH - x - 1;
+        y = HEIGHT - y - 1;
+        break;
+    case 3 :
+        ssd1306_swap(x, y);
+        y = HEIGHT - y - 1;
+        break;
+    }
 
   	// x is which column
-  	switch (color) {
+    switch (color) {
     case WHITE :
-    	buffer[x+ (y/8)*SSD1306_LCDWIDTH] |=  (1 << (y&7));
-    	break;
+        buffer[x+ (y/8)*SSD1306_LCDWIDTH] |=  (1 << (y&7));
+        break;
     case BLACK : 
-    	buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7));
-    	break;
-    case 
-    	INVERSE : 
-    	buffer[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7));
-    	break;
-  	}
+        buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7));
+        break;
+    case INVERSE : 
+        buffer[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7));
+        break;
+    }
 
 }
 
 /** invertOledDisplay()
- *	@brief Public function member to set the orientation of OLED display
- *	@param i : the display orientation
+ *  @brief Public function member to set the orientation of OLED display
+ *  @param i : the display orientation
  */
 void Oled::invertOledDisplay(uint8_t i) {
   	if (i) {
-    	oledCommand(SSD1306_INVERTDISPLAY);
+        oledCommand(SSD1306_INVERTDISPLAY);
   	} 
-  	else {
-    	oledCommand(SSD1306_NORMALDISPLAY);
-  	}
+    else {
+        oledCommand(SSD1306_NORMALDISPLAY);
+    }
 }
 
 /** oledCommand()
- *	@brief Public function member to send a command to the SSD1306 controller
- *		   using the I2C interface
- *	@param c : command to be sent to SSD1306 controller
+ *  @brief Public function member to send a command to the SSD1306 controller
+ *         using the I2C interface
+ *  @param c : command to be sent to SSD1306 controller
  */
 void Oled::oledCommand(uint8_t c) {
-	// I2C
-	uint8_t control = 0x00;   // Co = 0, D/C = 0
-	Wire.beginTransmission(i2cAddr);
-	Wire.write(control);
-	Wire.write(c);
-	Wire.endTransmission();
+    // I2C
+    uint8_t control = 0x00;   // Co = 0, D/C = 0
+    Wire.beginTransmission(i2cAddr);
+    Wire.write(control);
+    Wire.write(c);
+    Wire.endTransmission();
 }
  
 /** startScrollRightOled()
  *	@brief Public function member to activate a right handed scroll 
- *		   for rows start through stop
- *	@param start : the start row
- *	@param stop : the stop row
- *	@note The display is 16 rows tall. To scroll the whole display, run :
- *		  accessoryShield.scrollRightOled(0x00, 0x0F)
+ *         for rows start through stop
+ *  @param start : the start row
+ *  @param stop : the stop row
+ *  @note The display is 16 rows tall. To scroll the whole display, run :
+ *        accessoryShield.scrollRightOled(0x00, 0x0F)
  */
 void Oled::startScrollRightOled(uint8_t start, uint8_t stop){
-	oledCommand(SSD1306_RIGHT_HORIZONTAL_SCROLL);
-	oledCommand(0X00);
-	oledCommand(start);
-	oledCommand(0X00);
-	oledCommand(stop);
-	oledCommand(0X00);
-	oledCommand(0XFF);
-	oledCommand(SSD1306_ACTIVATE_SCROLL);
+    oledCommand(SSD1306_RIGHT_HORIZONTAL_SCROLL);
+    oledCommand(0X00);
+    oledCommand(start);
+    oledCommand(0X00);
+    oledCommand(stop);
+    oledCommand(0X00);
+    oledCommand(0XFF);
+    oledCommand(SSD1306_ACTIVATE_SCROLL);
 }
 
-/** startScrollLeftOled()
- *	@brief Public function member to activate a left handed scroll 
- *		   for rows start through stop
- *	@param start : the start row
- *	@param stop : the stop row
- *	@note The display is 16 rows tall. To scroll the whole display, run :
- *		  accessoryShield.scrollRightOled(0x00, 0x0F)
+/**startScrollLeftOled()
+ *  @brief Public function member to activate a left handed scroll 
+ *         for rows start through stop
+ *  @param start : the start row
+ *  @param stop : the stop row
+ *  @note The display is 16 rows tall. To scroll the whole display, run :
+ *        accessoryShield.scrollRightOled(0x00, 0x0F)
  */
 void Oled::startScrollLeftOled(uint8_t start, uint8_t stop){
-	oledCommand(SSD1306_LEFT_HORIZONTAL_SCROLL);
-	oledCommand(0X00);
-	oledCommand(start);
-	oledCommand(0X00);
-	oledCommand(stop);
-	oledCommand(0X00);
-	oledCommand(0XFF);
-	oledCommand(SSD1306_ACTIVATE_SCROLL);
+    oledCommand(SSD1306_LEFT_HORIZONTAL_SCROLL);
+    oledCommand(0X00);
+    oledCommand(start);
+    oledCommand(0X00);
+    oledCommand(stop);
+    oledCommand(0X00);
+    oledCommand(0XFF);
+    oledCommand(SSD1306_ACTIVATE_SCROLL);
 }
 
 /** startScrollDiagRightOled()
- *	@brief Public function member to activate a diagonal right scroll 
- *		   for rows start through stop
- *	@param start : the start row
- *	@param stop : the stop row
- *	@note The display is 16 rows tall. To scroll the whole display, run :
- *		  accessoryShield.scrollRightOled(0x00, 0x0F)
+ *  @brief Public function member to activate a diagonal right scroll 
+ *         for rows start through stop
+ *  @param start : the start row
+ *  @param stop : the stop row
+ *  @note The display is 16 rows tall. To scroll the whole display, run:
+ *        accessoryShield.scrollRightOled(0x00, 0x0F)
  */
 void Oled::startScrollDiagRightOled(uint8_t start, uint8_t stop){
-	oledCommand(SSD1306_SET_VERTICAL_SCROLL_AREA);
-	oledCommand(0X00);
-	oledCommand(SSD1306_LCDHEIGHT);
-	oledCommand(SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL);
-	oledCommand(0X00);
-	oledCommand(start);
-	oledCommand(0X00);
-	oledCommand(stop);
-	oledCommand(0X01);
-	oledCommand(SSD1306_ACTIVATE_SCROLL);
+    oledCommand(SSD1306_SET_VERTICAL_SCROLL_AREA);
+    oledCommand(0X00);
+    oledCommand(SSD1306_LCDHEIGHT);
+    oledCommand(SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL);
+    oledCommand(0X00);
+    oledCommand(start);
+    oledCommand(0X00);
+    oledCommand(stop);
+    oledCommand(0X01);
+    oledCommand(SSD1306_ACTIVATE_SCROLL);
 }
 
 /** startScrollDiagLeftOled()
- *	@brief Public function member to activate a diagonal left scroll 
- *		   for rows start through stop
- *	@param start : the start row
- *	@param stop : the stop row
+ *  @brief Public function member to activate a diagonal left scroll 
+ *         for rows start through stop
+ *  @param start : the start row
+ *  @param stop : the stop row
  *	@note The display is 16 rows tall. To scroll the whole display, run :
- *		  accessoryShield.scrollRightOled(0x00, 0x0F)
+ *        accessoryShield.scrollRightOled(0x00, 0x0F)
  */
 void Oled::startScrollDiagLeftOled(uint8_t start, uint8_t stop){
-	oledCommand(SSD1306_SET_VERTICAL_SCROLL_AREA);
-	oledCommand(0X00);
-	oledCommand(SSD1306_LCDHEIGHT);
-	oledCommand(SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL);
-	oledCommand(0X00);
-	oledCommand(start);
-	oledCommand(0X00);
-	oledCommand(stop);
-	oledCommand(0X01);
-	oledCommand(SSD1306_ACTIVATE_SCROLL);
+    oledCommand(SSD1306_SET_VERTICAL_SCROLL_AREA);
+    oledCommand(0X00);
+    oledCommand(SSD1306_LCDHEIGHT);
+    oledCommand(SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL);
+    oledCommand(0X00);
+    oledCommand(start);
+    oledCommand(0X00);
+    oledCommand(stop);
+    oledCommand(0X01);
+    oledCommand(SSD1306_ACTIVATE_SCROLL);
 }
 
 /** stopScrollOled()
- *	@brief Public function member to stop display scrolling
- *	@param void
+ *  @brief Public function member to stop display scrolling
+ *  @param void
  */
 void Oled::stopScrollOled(void){
-	oledCommand(SSD1306_DEACTIVATE_SCROLL);
+    oledCommand(SSD1306_DEACTIVATE_SCROLL);
 }
 
 /** dimOled()
- *	@brief Public function member to dim the OLED display
- *	@param dim => if dim is true the display is dimmed
+ *  @brief Public function member to dim the OLED display
+ *  @param dim => if dim is true the display is dimmed
  *				  else the display is normal
  */
 void Oled::dimOled(bool dim) {
-	uint8_t contrast;
+    uint8_t contrast;
 
-	if (dim) {
-		contrast = 0; // Dimmed display
-	} 
-  	else {
-		contrast = 0xCF;
-  	}
-  	// the range of contrast to too small to be really useful
-  	// it is useful to dim the display
-	oledCommand(SSD1306_SETCONTRAST);
-	oledCommand(contrast);
+    if (dim) {
+        contrast = 0; // Dimmed display
+    }
+    else {
+        contrast = 0xCF;
+    }
+    // the range of contrast to too small to be really useful
+    // it is useful to dim the display
+    oledCommand(SSD1306_SETCONTRAST);
+    oledCommand(contrast);
 }
 
 /** oledPaint()
- *	@brief Public function member to draw objects, data or test 
- *		   on the the OLED display 
- *	@param void
+ *  @brief Public function member to draw objects, data or test 
+ *         on the the OLED display 
+ *  @param void
  */
 void Oled::oledPaint(void) {
-	oledCommand(SSD1306_COLUMNADDR);
-	oledCommand(0);   // Column start address (0 = reset)
-	oledCommand(SSD1306_LCDWIDTH-1); // Column end address (127 = reset)
+    oledCommand(SSD1306_COLUMNADDR);
+    oledCommand(0);   // Column start address (0 = reset)
+    oledCommand(SSD1306_LCDWIDTH-1); // Column end address (127 = reset)
 
-	oledCommand(SSD1306_PAGEADDR);
-	oledCommand(0); // Page start address (0 = reset)
+    oledCommand(SSD1306_PAGEADDR);
+    oledCommand(0); // Page start address (0 = reset)
 #if SSD1306_LCDHEIGHT == 64
-	oledCommand(7); // Page end address
+    oledCommand(7); // Page end address
 #endif
 
-// save I2C bitrate
+    // save I2C bitrate
 #ifdef TWBR
-	uint8_t twbrbackup = TWBR;
-	TWBR = 12; // upgrade to 400KHz!
+    uint8_t twbrbackup = TWBR;
+    TWBR = 12; // upgrade to 400KHz!
 #endif
 
-  // Serial.println(TWBR, DEC);
-  // Serial.println(TWSR & 0x3, DEC);
+    // Serial.println(TWBR, DEC);
+    // Serial.println(TWSR & 0x3, DEC);
 
-	// I2C
-	for (uint16_t i=0; i<(SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8); i++) {
-		// send a bunch of data in one transmission
-		Wire.beginTransmission(i2cAddr);
-    	WIRE_WRITE(0x40);
-    	for (uint8_t x=0; x<16; x++) {
-			WIRE_WRITE(buffer[i]);
-			i++;
-		}
-		i--;
-		Wire.endTransmission();
-	}
+    // I2C
+    for (uint16_t i=0; i<(SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8); i++) {
+        // send a bunch of data in one transmission
+        Wire.beginTransmission(i2cAddr);
+        WIRE_WRITE(0x40);
+        for (uint8_t x=0; x<16; x++) {
+            WIRE_WRITE(buffer[i]);
+            i++;
+        }
+        i--;
+        Wire.endTransmission();
+    }
 #ifdef TWBR
-  	TWBR = twbrbackup;
+    TWBR = twbrbackup;
 #endif
 }
 
 /** clearOledDisplay()
- *	@brief Public function member to clear the OLED display
- *	@param void
+ *  @brief Public function member to clear the OLED display
+ *  @param void
  */
 void Oled::clearOledDisplay(void) {
-	memset(buffer, 0, (SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8));
+    memset(buffer, 0, (SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8));
 }
 
 /** drawFastHLineOled()
- *	@brief Public function member to draw a horizontal line
- *	@param x : the x coordinate
- *	@param y : the y coordinate
- *	@param w : the line width
- *	@param color
+ *  @brief Public function member to draw a horizontal line
+ *  @param x : the x coordinate
+ *  @param y : the y coordinate
+ *  @param w : the line width
+ *  @param color
  */
 void Oled::drawFastHLineOled(int16_t x, int16_t y, int16_t w, uint16_t color) {
-	boolean bSwap = false;
-	switch(rotation) {
+    boolean bSwap = false;
+    switch(rotation) {
     case 0:
-      	// 0 degree rotation, do nothing
-      	break;
+        // 0 degree rotation, do nothing
+        break;
     case 1:
-      	// 90 degree rotation, swap x & y for rotation, then invert x
-		bSwap = true;
-		ssd1306_swap(x, y);
-		x = WIDTH - x - 1;
-		break;
+        // 90 degree rotation, swap x & y for rotation, then invert x
+        bSwap = true;
+        ssd1306_swap(x, y);
+        x = WIDTH - x - 1;
+        break;
     case 2:
-		// 180 degree rotation, invert x and y - then shift y around for height.
-		x = WIDTH - x - 1;
-		y = HEIGHT - y - 1;
-		x -= (w-1);
-		break;
+        // 180 degree rotation, invert x and y - then shift y around for height.
+        x = WIDTH - x - 1;
+        y = HEIGHT - y - 1;
+        x -= (w-1);
+        break;
     case 3:
-		// 270 degree rotation, swap x & y for rotation, then invert y  and adjust y for w (not to become h)
-		bSwap = true;
-		ssd1306_swap(x, y);
-		y = HEIGHT - y - 1;
-		y -= (w-1);
-		break;
-	}
+        // 270 degree rotation, swap x & y for rotation, then invert y  and adjust y for w (not to become h)
+        bSwap = true;
+        ssd1306_swap(x, y);
+        y = HEIGHT - y - 1;
+        y -= (w-1);
+        break;
+    }
 
-	if(bSwap) {
-		drawFastVLineInternal(x, y, w, color);
-	} 
+    if(bSwap) {
+        drawFastVLineInternal(x, y, w, color);
+    }
 	else {
-		drawFastHLineInternal(x, y, w, color);
-	}
+        drawFastHLineInternal(x, y, w, color);
+    }
 }
 
 void Oled::drawFastHLineInternal(int16_t x, int16_t y, int16_t w, uint16_t color) {
-  // Do bounds/limit checks
-  if(y < 0 || y >= HEIGHT) { return; }
+    // Do bounds/limit checks
+    if (y < 0 || y >= HEIGHT) { return; }
 
-  // make sure we don't try to draw below 0
-  if(x < 0) {
-    w += x;
-    x = 0;
-  }
+    // make sure we don't try to draw below 0
+    if (x < 0) {
+        w += x;
+        x = 0;
+    }
 
-  // make sure we don't go off the edge of the display
-  if( (x + w) > WIDTH) {
-    w = (WIDTH - x);
-  }
+    // make sure we don't go off the edge of the display
+    if ( (x + w) > WIDTH ) {
+        w = (WIDTH - x);
+    }
 
-  // if our width is now negative, punt
-  if(w <= 0) { return; }
+    // if our width is now negative, punt
+    if(w <= 0) { return; }
 
-  // set up the pointer for  movement through the buffer
-  register uint8_t *pBuf = buffer;
-  // adjust the buffer pointer for the current row
-  pBuf += ((y/8) * SSD1306_LCDWIDTH);
-  // and offset x columns in
-  pBuf += x;
+    // set up the pointer for  movement through the buffer
+    register uint8_t *pBuf = buffer;
+    // adjust the buffer pointer for the current row
+    pBuf += ((y/8) * SSD1306_LCDWIDTH);
+    // and offset x columns in
+    pBuf += x;
 
-  register uint8_t mask = 1 << (y&7);
+    register uint8_t mask = 1 << (y&7);
 
-  switch (color) {
-  case WHITE :
-    while(w--) { *pBuf++ |= mask; };
-    break;
-  case BLACK : 
-  	mask = ~mask;
-  	while(w--) { *pBuf++ &= mask; };
-  	break;
-  case INVERSE :
-  	while(w--) { *pBuf++ ^= mask; }; 
-  	break;
-  }
+    switch (color) {
+    case WHITE :
+        while(w--) { *pBuf++ |= mask; };
+        break;
+    case BLACK : 
+        mask = ~mask;
+        while(w--) { *pBuf++ &= mask; };
+        break;
+    case INVERSE :
+        while(w--) { *pBuf++ ^= mask; }; 
+        break;
+    }
 }
 
 /** drawFastVLineOled()
- *	@brief Public function member to draw a vertical line
- *	@param x : the x coordinate
- *	@param y : the y coordinate
- *	@param w : the line width
- *	@param color
+ *  @brief Public function member to draw a vertical line
+ *  @param x : the x coordinate
+ *  @param y : the y coordinate
+ *  @param w : the line width
+ *  @param color
  */
 void Oled::drawFastVLineOled(int16_t x, int16_t y, int16_t h, uint16_t color) {
-	bool bSwap = false;
-	switch(rotation) {
+    bool bSwap = false;
+    switch(rotation) {
     case 0:
-		break;
+        break;
     case 1:
-		// 90 degree rotation, swap x & y for rotation, then invert x and adjust x for h (now to become w)
-		bSwap = true;
-		ssd1306_swap(x, y);
-		x = WIDTH - x - 1;
-		x -= (h-1);
-		break;
+        // 90 degree rotation, swap x & y for rotation, then invert x and adjust x for h (now to become w)
+        bSwap = true;
+        ssd1306_swap(x, y);
+        x = WIDTH - x - 1;
+        x -= (h-1);
+        break;
     case 2:
-		// 180 degree rotation, invert x and y - then shift y around for height.
-		x = WIDTH - x - 1;
-		y = HEIGHT - y - 1;
-		y -= (h-1);
-		break;
+        // 180 degree rotation, invert x and y - then shift y around for height.
+        x = WIDTH - x - 1;
+        y = HEIGHT - y - 1;
+        y -= (h-1);
+        break;
     case 3:
-		// 270 degree rotation, swap x & y for rotation, then invert y
-		bSwap = true;
-		ssd1306_swap(x, y);
-		y = HEIGHT - y - 1;
-		break;
-	}
+        // 270 degree rotation, swap x & y for rotation, then invert y
+        bSwap = true;
+        ssd1306_swap(x, y);
+        y = HEIGHT - y - 1;
+        break;
+    }
 
-	if(bSwap) {
-		drawFastHLineInternal(x, y, h, color);
-	} 
-	else {
-		drawFastVLineInternal(x, y, h, color);
+    if(bSwap) {
+        drawFastHLineInternal(x, y, h, color);
+    } 
+    else {
+        drawFastVLineInternal(x, y, h, color);
 	}
 }
-
 
 void Oled::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
 
   // do nothing if we're off the left or right side of the screen
-  if(x < 0 || x >= WIDTH) { return; }
+  if (x < 0 || x >= WIDTH) { return; }
 
   // make sure we don't try to draw below 0
-  if(__y < 0) {
+  if (__y < 0) {
     // __y is negative, this will subtract enough from __h to account for __y being 0
     __h += __y;
     __y = 0;
@@ -540,19 +538,18 @@ void Oled::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_t c
   }
 
   // make sure we don't go past the height of the display
-  if( (__y + __h) > HEIGHT) {
+  if ( (__y + __h) > HEIGHT ) {
     __h = (HEIGHT - __y);
   }
 
   // if our height is now negative, punt
-  if(__h <= 0) {
+  if (__h <= 0) {
     return;
   }
 
   // this display doesn't need ints for coordinates, use local byte registers for faster juggling
   register uint8_t y = __y;
   register uint8_t h = __h;
-
 
   // set up the pointer for fast movement through the buffer
   register uint8_t *pBuf = buffer;
@@ -563,7 +560,7 @@ void Oled::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_t c
 
   // do the first partial byte, if necessary - this requires some masking
   register uint8_t mod = (y&7);
-  if(mod) {
+  if (mod) {
     // mask off the high n bits we want to set
     mod = 8-mod;
 
@@ -573,19 +570,18 @@ void Oled::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_t c
     register uint8_t mask = premask[mod];
 
     // adjust the mask if we're not going to reach the end of this byte
-    if( h < mod) {
+    if (h < mod) {
       mask &= (0XFF >> (mod-h));
     }
 
-  switch (color)
-    {
+    switch (color) {
     case WHITE:   *pBuf |=  mask;  break;
     case BLACK:   *pBuf &= ~mask;  break;
     case INVERSE: *pBuf ^=  mask;  break;
     }
 
     // fast exit if we're done here!
-    if(h<mod) { return; }
+    if (h < mod) { return; }
 
     h -= mod;
 
@@ -594,11 +590,11 @@ void Oled::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_t c
 
 
   // write solid bytes while we can - effectively doing 8 rows at a time
-  if(h >= 8) {
+  if (h >= 8) {
     if (color == INVERSE)  {
       // separate copy of the code so we don't impact performance of the black/white 
       // write version with an extra comparison per loop
-      do  {
+      do {
         *pBuf=~(*pBuf);
 
         // adjust the buffer forward 8 rows worth of data
@@ -626,7 +622,7 @@ void Oled::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_t c
   }
 
   // now do the final partial byte, if necessary
-  if(h) {
+  if (h) {
     mod = h & 7;
     // this time we want to mask the low bits of the byte, vs the high bits we did above
     // register uint8_t mask = (1 << mod) - 1;
